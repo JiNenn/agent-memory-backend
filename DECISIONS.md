@@ -26,3 +26,12 @@
 - 判断: API は MySQL transaction 内で `memories` と `outbox_events` を保存するところまでを担当する。
 - 影響: API レスポンスは非同期処理の受付完了になり、VectorDB 反映状態は task API で確認する。
 - 記事価値: 高い。Outbox Pattern を採用する動機を実装前に示せる。
+
+## 003. 初期 embedding は外部 API ではなく決定的なローカル実装にする
+
+- 日付: 2026-06-17
+- 状態: 採用
+- 背景: 今回の目的は LLM アプリ構築ではなく、memory の保存・非同期反映・検索 index の責務分離を検証すること。
+- 判断: 文字 n-gram を hashing して固定長ベクトルを作る簡易 embedding を使う。
+- 影響: 検索品質は限定的だが、Docker Compose だけで再現できる。後続で OpenAI などの embedding provider に差し替えやすい。
+- 記事価値: 中。外部 AI 依存を外してアーキテクチャの検証範囲を狭める判断として説明しやすい。
