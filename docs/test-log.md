@@ -43,3 +43,11 @@ command:
 
 result:
 `1 passed, 2 warnings`
+
+## hashing embedding を追加
+
+command:
+`python -m pytest tests/test_embeddings.py`
+
+result:
+`2 passed`
