@@ -37,3 +37,18 @@ VectorDB
 | VectorDB       | semantic search 用のベクトルを保存する            |
 | Docker Compose | ローカル再現環境を作る                            |
 
+## 3. データ保存方針
+
+Memory の正本は MySQL に保存する。
+
+VectorDB は検索用 index として扱い，memory 本体の正本にはしない。
+
+```text
+MySQL
+  = memory の正本
+
+VectorDB
+  = semantic search 用 index
+```
+
+この方針により，VectorDB への反映に失敗しても，memory 本体は MySQL に残る。
