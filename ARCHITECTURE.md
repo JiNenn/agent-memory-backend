@@ -52,3 +52,23 @@ VectorDB
 ```
 
 この方針により，VectorDB への反映に失敗しても，memory 本体は MySQL に残る。
+
+## 4. Outbox Pattern
+
+API 内では MySQL と VectorDB に直接同時書き込みしない。
+
+理由は，片方だけ成功し，片方だけ失敗する dual-write 問題を避けるためである。
+
+採用する流れは以下。
+
+```text
+POST /memories
+  ↓
+MySQL transaction
+  ├── memories に保存
+  └── outbox_events に保存
+  ↓
+API は受付完了を返す
+```
+
+この段階では，API の責務を MySQL への保存までに限定する。
