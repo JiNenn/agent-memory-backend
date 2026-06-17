@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
 from .models import Memory, OutboxEvent, OutboxEventType, OutboxStatus, utcnow
@@ -37,9 +37,14 @@ def claim_next_outbox_event(
     now: datetime | None = None,
 ) -> OutboxEvent | None:
     current_time = now or utcnow()
+    expired_processing = and_(
+        OutboxEvent.status == OutboxStatus.PROCESSING.value,
+        OutboxEvent.locked_until.is_not(None),
+        OutboxEvent.locked_until < current_time,
+    )
     statement = (
         select(OutboxEvent)
-        .where(OutboxEvent.status == OutboxStatus.PENDING.value)
+        .where(or_(OutboxEvent.status == OutboxStatus.PENDING.value, expired_processing))
         .order_by(OutboxEvent.created_at.asc())
         .limit(1)
         .with_for_update(skip_locked=True)
