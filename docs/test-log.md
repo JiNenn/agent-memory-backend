@@ -35,3 +35,11 @@ fix:
 
 result:
 `1 passed, 2 warnings`
+
+## task 状態確認 API を追加
+
+command:
+`python -m pytest tests/test_api_tasks.py`
+
+result:
+`1 passed, 2 warnings`
