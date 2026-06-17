@@ -68,3 +68,11 @@ command:
 
 result:
 `1 passed, 2 warnings`
+
+## pending outbox event を claim する
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_claim.py`
+
+result:
+`1 passed`
