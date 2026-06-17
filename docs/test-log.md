@@ -100,3 +100,11 @@ command:
 
 result:
 `2 passed`
+
+## outbox worker 本体を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_worker.py`
+
+result:
+`1 passed`
