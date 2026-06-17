@@ -81,3 +81,6 @@ API は受付完了を返す
 | --------------- | ------------------------------ |
 | POST /memories  | memory を保存し，outbox_event を作成する |
 | GET /tasks/{id} | 非同期処理の状態を確認する                  |
+| GET /memories/search | VectorDB を使って関連 memory を検索する   |
+
+検索 API は VectorDB から得た memory id を使い，最終的な memory 本体を MySQL から取得する。

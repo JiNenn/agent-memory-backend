@@ -43,3 +43,28 @@ command:
 
 result:
 `1 passed, 2 warnings`
+
+## hashing embedding を追加
+
+command:
+`python -m pytest tests/test_embeddings.py`
+
+result:
+`2 passed`
+
+## memory 検索 API を追加
+
+command:
+`python -m pytest tests/test_api_search.py`
+
+first result:
+`ERROR ModuleNotFoundError: No module named 'qdrant_client'`
+
+fix:
+`.venv` を作成して `pip install -e ".[dev]"` を実行した。
+
+command:
+`.venv\Scripts\python -m pytest tests/test_api_search.py`
+
+result:
+`1 passed, 2 warnings`
