@@ -68,3 +68,51 @@ command:
 
 result:
 `1 passed, 2 warnings`
+
+## pending outbox event を claim する
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_claim.py`
+
+result:
+`1 passed`
+
+## 期限切れ processing event を再取得する
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_claim.py`
+
+result:
+`2 passed`
+
+## outbox event の完了処理を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_claim.py`
+
+result:
+`3 passed`
+
+## outbox event の retry と failed 遷移を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_retry.py`
+
+result:
+`2 passed`
+
+## outbox worker 本体を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_worker.py`
+
+result:
+`1 passed`
+
+## Docker Compose の再現環境を追加
+
+command:
+`docker compose config --quiet`
+
+result:
+`exit 0`
