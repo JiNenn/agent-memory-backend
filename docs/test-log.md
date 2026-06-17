@@ -108,3 +108,11 @@ command:
 
 result:
 `1 passed`
+
+## Docker Compose の再現環境を追加
+
+command:
+`docker compose config --quiet`
+
+result:
+`exit 0`
