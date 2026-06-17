@@ -1,0 +1,9 @@
+.git/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.env
+開発メモ.txt
+

@@ -1,0 +1,9 @@
+開発メモ.txt
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+agent_memory.db
+
