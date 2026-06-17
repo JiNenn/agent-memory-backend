@@ -21,3 +21,17 @@ command:
 
 result:
 `1 passed`
+
+## memory 作成 API を追加
+
+command:
+`python -m pytest tests/test_api_memories.py`
+
+first result:
+`ERROR ModuleNotFoundError: No module named 'pymysql'`
+
+fix:
+テスト import 前に `DATABASE_URL=sqlite+pysqlite:///:memory:` を設定した。
+
+result:
+`1 passed, 2 warnings`
