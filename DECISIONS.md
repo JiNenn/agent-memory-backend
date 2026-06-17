@@ -35,3 +35,12 @@
 - 判断: 文字 n-gram を hashing して固定長ベクトルを作る簡易 embedding を使う。
 - 影響: 検索品質は限定的だが、Docker Compose だけで再現できる。後続で OpenAI などの embedding provider に差し替えやすい。
 - 記事価値: 中。外部 AI 依存を外してアーキテクチャの検証範囲を狭める判断として説明しやすい。
+
+## 004. 検索結果は VectorDB から得た ID で MySQL を引き直す
+
+- 日付: 2026-06-17
+- 状態: 採用
+- 背景: VectorDB を memory の正本にしないため、payload だけで API レスポンスを組み立てると正本とずれる可能性がある。
+- 判断: VectorDB は memory id と score を返す index として使い、本文や metadata は MySQL から取得する。
+- 影響: 検索 API は VectorDB と MySQL の両方に触る。削除済み・未反映の index があっても MySQL 側で落とせる。
+- 記事価値: 高い。VectorDB を正本にしない設計が API 実装にどう表れるかを示せる。
