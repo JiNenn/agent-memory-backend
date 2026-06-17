@@ -60,3 +60,11 @@ def claim_next_outbox_event(
     session.commit()
     session.refresh(event)
     return event
+
+
+def mark_outbox_completed(session: Session, event: OutboxEvent) -> None:
+    event.status = OutboxStatus.COMPLETED.value
+    event.locked_by = None
+    event.locked_until = None
+    event.completed_at = utcnow()
+    session.commit()

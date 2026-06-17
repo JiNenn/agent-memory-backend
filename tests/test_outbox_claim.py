@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.models import Base, OutboxStatus, utcnow
 from app.schemas import MemoryCreate
-from app.services import claim_next_outbox_event, create_memory_with_outbox
+from app.services import claim_next_outbox_event, create_memory_with_outbox, mark_outbox_completed
 
 
 def make_session():
@@ -44,3 +44,21 @@ def test_expired_processing_event_can_be_reclaimed() -> None:
         assert claimed is not None
         assert claimed.id == event.id
         assert claimed.locked_by == "worker-2"
+
+
+def test_completed_event_clears_lock() -> None:
+    Session = make_session()
+
+    with Session() as session:
+        _, event = create_memory_with_outbox(session, MemoryCreate(content="remember this"))
+        claimed = claim_next_outbox_event(session, "worker-1", lease_seconds=30)
+        assert claimed is not None
+
+        mark_outbox_completed(session, claimed)
+
+        stored_event = session.get(type(event), event.id)
+        assert stored_event is not None
+        assert stored_event.status == OutboxStatus.COMPLETED.value
+        assert stored_event.locked_by is None
+        assert stored_event.locked_until is None
+        assert stored_event.completed_at is not None

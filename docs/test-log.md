@@ -84,3 +84,11 @@ command:
 
 result:
 `2 passed`
+
+## outbox event の完了処理を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_claim.py`
+
+result:
+`3 passed`
