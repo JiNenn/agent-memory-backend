@@ -37,6 +37,10 @@ VectorDB
 | VectorDB       | semantic search 用のベクトルを保存する            |
 | Docker Compose | ローカル再現環境を作る                            |
 
+初期実装では，Queue は Redis ではなく MySQL の outbox_events を Worker が polling する形にする。
+
+理由は，最初に検証したい対象が「MySQL を正本にし，VectorDB を検索 index として非同期反映する構成」だからである。Redis Queue は後続で追加し，DB polling と比較する。
+
 ## 3. データ保存方針
 
 Memory の正本は MySQL に保存する。
@@ -72,6 +76,15 @@ API は受付完了を返す
 ```
 
 この段階では，API の責務を MySQL への保存までに限定する。
+
+outbox_event の状態は以下とする。
+
+```text
+pending
+processing
+completed
+failed
+```
 
 ## 5. 最小 API
 

@@ -44,3 +44,12 @@
 - 判断: VectorDB は memory id と score を返す index として使い、本文や metadata は MySQL から取得する。
 - 影響: 検索 API は VectorDB と MySQL の両方に触る。削除済み・未反映の index があっても MySQL 側で落とせる。
 - 記事価値: 高い。VectorDB を正本にしない設計が API 実装にどう表れるかを示せる。
+
+## 005. 初期実装では Redis Queue を使わず DB polling にする
+
+- 日付: 2026-06-17
+- 状態: 採用
+- 背景: outbox pattern の効果を検証する段階では、Queue を追加すると失敗箇所と観察対象が増える。
+- 判断: `outbox_events` を worker が直接 polling する。Redis Queue は後続で比較検証する。
+- 影響: Compose の初期構成は `api` / `worker` / `mysql` / `qdrant` に絞る。
+- 記事価値: 高い。Redis Queue が本当に必要かを、実装後に比較する軸を作れる。
