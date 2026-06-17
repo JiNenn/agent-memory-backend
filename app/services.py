@@ -68,3 +68,16 @@ def mark_outbox_completed(session: Session, event: OutboxEvent) -> None:
     event.locked_until = None
     event.completed_at = utcnow()
     session.commit()
+
+
+def mark_outbox_failed(session: Session, event: OutboxEvent, exc: Exception) -> None:
+    event.retry_count += 1
+    event.status = (
+        OutboxStatus.FAILED.value
+        if event.retry_count >= event.max_retries
+        else OutboxStatus.PENDING.value
+    )
+    event.locked_by = None
+    event.locked_until = None
+    event.last_error = str(exc)
+    session.commit()

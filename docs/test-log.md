@@ -92,3 +92,11 @@ command:
 
 result:
 `3 passed`
+
+## outbox event の retry と failed 遷移を追加
+
+command:
+`.venv\Scripts\python -m pytest tests/test_outbox_retry.py`
+
+result:
+`2 passed`
