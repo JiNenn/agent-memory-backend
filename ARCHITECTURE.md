@@ -86,7 +86,33 @@ completed
 failed
 ```
 
-## 5. 最小 API
+Worker 実装で検証する論点は以下。
+
+| 論点          | 内容                                   |
+| ----------- | ------------------------------------ |
+| retry       | 一時的な失敗を再試行する                         |
+| retry_count | 失敗回数を保存する                            |
+| idempotency | 同じイベントを再実行しても壊れないようにする               |
+| failed      | 最大回数を超えたら失敗状態にする                     |
+| 二重実行対策      | 複数 Worker が同じ event を処理しても破綻しないようにする |
+
+## 5. Worker の責務
+
+Worker は，重い処理・失敗しやすい処理を担当する。
+
+主な処理は以下。
+
+```text
+outbox_event を取得する
+embedding を生成する
+VectorDB に保存する
+処理状態を更新する
+失敗したら retry する
+```
+
+API の責務は MySQL への保存までとし，VectorDB 反映は Worker に任せる。
+
+## 6. 最小 API
 
 最小実装では，まず以下の API を作る。
 
@@ -97,3 +123,5 @@ failed
 | GET /memories/search | VectorDB を使って関連 memory を検索する   |
 
 検索 API は VectorDB から得た memory id を使い，最終的な memory 本体を MySQL から取得する。
+
+この3つで，保存，非同期処理，検索，失敗時の状態確認を検証する。
